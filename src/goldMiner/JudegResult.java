@@ -23,8 +23,8 @@ public class JudegResult {
 		// 如果没有超时，也没有到达指定分数，也没有金子了，也算过关 ！！！
 		
 		//遍历集合中有几个金子
-		for (int i = 0; i < MyPanel.goldSets.size(); i++) {
-			if (MyPanel.goldSets.get(i) != null) {
+		for (int i = 0; i < SoloPanel.goldSets.size(); i++) {
+			if (SoloPanel.goldSets.get(i) != null) {
 				count++;
 			}
 		}

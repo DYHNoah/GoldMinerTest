@@ -17,7 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class MyPanel extends JPanel {
+public class SoloPanel extends JPanel {
 	/**
 	 * 创建一个集合，存储所有金子
 	 */
@@ -92,11 +92,11 @@ public class MyPanel extends JPanel {
 	boolean grabSucceed;
 	
 	
-	JudegResult judegResult = new JudegResult();
+//	JudegResult judegResult = new JudegResult();
 	Setting setting = new Setting();
 
 	//无参构造，初始化一些数据
-	public MyPanel() {
+	public SoloPanel() {
 		restoration();
 		initData();
 		setting.initSetting();
@@ -127,7 +127,7 @@ public class MyPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		// 画背景图
-		g.drawImage(background, 0, 0, Main.getWeight(), Main.getHeight(), null);
+		g.drawImage(background, 0, 0, SoloMode.getWeight(), SoloMode.getHeight(), null);
 		// 画我自己
 		g.drawImage(mySelfImg, mySelf.goldX, mySelf.goldY, mySelf.goldSize + 100, mySelf.goldSize, null);
 		//画出所有金子
@@ -146,15 +146,15 @@ public class MyPanel extends JPanel {
 		// 画爪子
 		g.drawImage(clawImg, (int) clawX - 50, (int) clawY - 40, 100, 100, null);
 		// 设置字体属性
-		g.setFont(new Font("宋体", Font.BOLD, 30));
+		g.setFont(new Font("宋体", Font.BOLD, 25));
 		// 画得分
-		g.drawString("得分:" + setting.getGrade(), 750, 80);
+		g.drawString("得分:" + setting.getGrade(), 1000, 50);
 		// 画目标得分
-		g.drawString("目标得分:" + setting.getTargetScore(), 900, 80);
+		g.drawString("目标得分:" + setting.getTargetScore(), 1000, 110);
 		// 画时间
-		g.drawString("时间:" + setting.getTime() / 1000, 250, 80);
+		g.drawString("时间:" + setting.getTime() / 1000, 20, 110);
 		// 画关卡
-		g.drawString("第 " + setting.getMyClass() + " 关", 50, 80);
+		g.drawString("第" + setting.getMyClass() + "关", 20, 50);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class MyPanel extends JPanel {
 		// 初始化我自己的大小
 		mySelf.goldSize = 100;
 		// 初始化我自己的位置，放在中间
-		mySelf.goldX = (Main.getWeight() / 2) - (mySelf.goldSize);
+		mySelf.goldX = (SoloMode.getWeight() / 2) - (mySelf.goldSize);
 		mySelf.goldY = 50;
 	}
 
@@ -232,7 +232,7 @@ public class MyPanel extends JPanel {
 		//初始化位置坐标
 		clawX = 600 - 20;
 		clawY = 250 - 20;
-		clawX0 = Main.getWeight() / 2 - 20;
+		clawX0 = SoloMode.getWeight() / 2 - 20;
 		clawY0 = 150 - 20;
 		//初始化爪子抓取速度
 		clawSpeed = 1;
@@ -281,12 +281,11 @@ public class MyPanel extends JPanel {
 		});
 		//程序主循环
 		while (true) {
-			//setting.setTime();
 			// 如果过关了，就下一关
-			if(judegResult.pass()) {
+			if(pass()) {
 				nextClass();
 			}
-			if (judegResult.gameOver()) {
+			if (gameOver()) {
 				int result = JOptionPane.showConfirmDialog(null, "游戏失败，再来一局？", "游戏结果", JOptionPane.YES_NO_OPTION);
 				if (result == 0) {// 再来一句，刷新数据
 					restoration();
@@ -303,7 +302,7 @@ public class MyPanel extends JPanel {
 			if (clawSpin) {
 				// 圆的方程
 				clawY = (int) (Math
-						.sqrt(10000 - ((clawX - (Main.getWeight() / 2 - 20)) * (clawX - (Main.getWeight() / 2 - 20)))))
+						.sqrt(10000 - ((clawX - (SoloMode.getWeight() / 2 - 20)) * (clawX - (SoloMode.getWeight() / 2 - 20)))))
 						+ 150 - 20;
 				//随着x坐标变化
 				clawX -= clawSpeed;
@@ -316,7 +315,7 @@ public class MyPanel extends JPanel {
 				}
 			} else { //爪子伸缩阶段
 				// 如果越界，则收回爪子
-				if (clawY >= 800 || clawX <= 0 || clawX >= Main.getWeight() + 100) {
+				if (clawY >= 800 || clawX <= 0 || clawX >= SoloMode.getWeight() + 100) {
 					clawStretch = false;
 					backclaw = true;
 				}
@@ -409,6 +408,59 @@ public class MyPanel extends JPanel {
 		if (gold.kind == 3) {
 			setting.setGrade(setting.getGrade() + 100);
 		}
+	}
+
+	public boolean pass() {
+		int count = 0;
+
+		// 如果到达指定分数，直接过关
+		if (setting.getGrade() >= setting.getTargetScore()) {
+			System.out.println(setting.getTargetScore());
+			return true;
+		}
+
+		// 如果游戏超时了，再判断有没有到达指定分数
+		if (overtime(setting.getTime())) {
+			if (setting.getGrade() >= setting.getTargetScore()) {
+				System.out.println("通关");
+				return true;
+			}
+		}
+		// 如果没有超时，也没有到达指定分数，也没有金子了，也算过关 ！！！
+
+		//遍历集合中有几个金子
+		for (int i = 0; i < goldSets.size(); i++) {
+			if (goldSets.get(i) != null) {
+				count++;
+			}
+		}
+		// 当没有金子的时候，游戏结束
+		if (count == 0) {
+			System.out.println("没有金子了");
+			return true;
+		}
+		return false;
+	}
+	public boolean gameOver() {
+
+		if (overtime(setting.getTime())) {
+			if (setting.getGrade() < setting.getTargetScore()) {
+				System.out.println("失败");
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
+	// 游戏到达截止时间
+	public boolean overtime(int time) {
+		// 每个关卡设置 60 秒时间
+		if (time > setting.deadline) {
+			return true;
+		}
+		return false;
 	}
 
 	public static ArrayList<GoldData> getGoldSets() {
