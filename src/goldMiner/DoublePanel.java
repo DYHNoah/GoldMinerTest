@@ -28,6 +28,8 @@ public class DoublePanel extends JPanel{
     BufferedImage background;
     BufferedImage mySelfImg;
     BufferedImage clawImg;
+    BufferedImage diamondImg;
+    BufferedImage rockImg;
 
     // 定义爪子位置
     /**
@@ -118,6 +120,8 @@ public class DoublePanel extends JPanel{
             background = ImageIO.read(getClass().getResource("background.jpg"));
             mySelfImg = ImageIO.read(getClass().getResource("mySelf.png"));
             clawImg = ImageIO.read(getClass().getResource("claw1.png"));
+            diamondImg = ImageIO.read(getClass().getResource("diamond1.png"));
+            rockImg = ImageIO.read(getClass().getResource("rock.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -197,7 +201,15 @@ public class DoublePanel extends JPanel{
         //画出所有金子
         for (int i = 0; i < goldSets.size(); i++) {
             GoldData golds = goldSets.get(i);
-            g.drawImage(goldImg, golds.goldX, golds.goldY, golds.goldSize, golds.goldSize, null);
+            if (golds.kind == 5){
+                g.drawImage(rockImg, golds.goldX, golds.goldY, golds.goldSize, golds.goldSize, null);
+            }
+            else if (golds.kind == 4){
+                g.drawImage(diamondImg, golds.goldX, golds.goldY, golds.goldSize, golds.goldSize, null);
+            }
+            else {
+                g.drawImage(goldImg, golds.goldX, golds.goldY, golds.goldSize, golds.goldSize, null);
+            }
         }
         // 设置2D画笔
         Graphics2D g2 = (Graphics2D) g;
@@ -342,16 +354,19 @@ public class DoublePanel extends JPanel{
                         // 获得抓到的那个金子
                         GoldData gold = goldSets.get(beGrab_1);
                         // 如果物品太大，收线速度变慢
-                        if (gold.goldSize >= 70) {
+                        if (gold.kind == 4) {
+                            stretchSpeed_1 = 4;
+                        }
+                        if (gold.goldSize >= 100) {
                             stretchSpeed_1 = 2;
                         }
-                        if (gold.goldSize >= 120) {
+                        if (gold.kind == 5) {
                             stretchSpeed_1 = 1;
                         }
                         // 收回爪子
                         withdrawClaw(1);
                         // 收回碰到的物品
-                        gold.goldX = (int) clawX_1 - 50;
+                        gold.goldX = (int) clawX_1 - 25;
                         gold.goldY = (int) clawY_1;
                         // 当收到自己位置时，消除此金子
                         if (isWithdrawSucceed(1)) {
@@ -427,16 +442,19 @@ public class DoublePanel extends JPanel{
                         // 获得抓到的那个金子
                         GoldData gold = goldSets.get(beGrab_2);
                         // 如果物品太大，收线速度变慢
-                        if (gold.goldSize >= 70) {
-                            stretchSpeed_2 = 2;
+                        if (gold.kind == 4) {
+                            stretchSpeed_1 = 4;
                         }
-                        if (gold.goldSize >= 120) {
-                            stretchSpeed_2 = 1;
+                        if (gold.goldSize >= 100) {
+                            stretchSpeed_1 = 2;
+                        }
+                        if (gold.kind == 5) {
+                            stretchSpeed_1 = 1;
                         }
                         // 收回爪子
                         withdrawClaw(2);
                         // 收回碰到的物品
-                        gold.goldX = (int) clawX_2 - 50;
+                        gold.goldX = (int) clawX_2 - 25;
                         gold.goldY = (int) clawY_2;
                         // 当收到自己位置时，消除此金子
                         if (isWithdrawSucceed(2)) {
@@ -544,6 +562,12 @@ public class DoublePanel extends JPanel{
         }
         if (gold.kind == 3) {
             setting.setGrade(setting.getGrade() + 100);
+        }
+        if (gold.kind == 4) {
+            setting.setGrade(setting.getGrade() + 200);
+        }
+        if (gold.kind == 5) {
+            setting.setGrade(setting.getGrade() + 25);
         }
     }
 
