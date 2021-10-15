@@ -5,17 +5,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class SoloPanel extends JPanel {
 	/**
@@ -279,115 +274,114 @@ public class SoloPanel extends JPanel {
 			}
 
 		});
-		//程序主循环
-		while (true) {
-			// 如果过关了，就下一关
-			if(pass()) {
-				nextClass();
+
+		new Timer(20, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mining();
+				// 刷新时间
+				setting.setTime(setting.getTime() + 20);
 			}
-			if (gameOver()) {
-				int result = JOptionPane.showConfirmDialog(null, "游戏失败，再来一局？", "游戏结果", JOptionPane.YES_NO_OPTION);
-				if (result == 0) {// 再来一句，刷新数据
-					restoration();
-					initData();
-					setting.initSetting();
-					repaint();
-				} else {// 退出
-					System.exit(0);
-				}
-			}
-			
-			
-			//准备阶段，爪子及线在半圆弧上移动
-			if (clawSpin) {
-				// 圆的方程
-				clawY = (int) (Math
-						.sqrt(10000 - ((clawX - (SoloMode.getWeight() / 2 - 20)) * (clawX - (SoloMode.getWeight() / 2 - 20)))))
-						+ 150 - 20;
-				//随着x坐标变化
-				clawX -= clawSpeed;
-				//当到达极限时,变向走，也就是只走半圆
-				if (clawX == 480) {
-					clawSpeed *= -1;
-				}
-				if (clawX == 680) {
-					clawSpeed *= -1;
-				}
-			} else { //爪子伸缩阶段
-				// 如果越界，则收回爪子
-				if (clawY >= 800 || clawX <= 0 || clawX >= SoloMode.getWeight() + 100) {
-					clawStretch = false;
-					backclaw = true;
-				}
-				//当可以向下伸长时
-				if (clawStretch) {
-					// 释放爪子
-					releaseClaw();
-					// 判断有没有抓到金子
-					for (int i = 0; i < goldSets.size(); i++) {
-						GoldData gold = goldSets.get(i);
-						// 如果爪子碰到金子
-						if (clawX >= gold.goldX && clawX <= gold.goldX + gold.goldSize && clawY >= gold.goldY
-								&& clawY <= gold.goldY + gold.goldSize) {
-							// 则伸缩标志=收回
-							clawStretch = false;
-							// 记录被抓金子的索引
-							beGrab = i;
-							// 抓到标志置true
-							grabSucceed = true;
-							break;
-						}
-					}
-				} else { //当可以收回爪子时
-					// 如果没有抓到东西，空收回
-					if (backclaw) {
-						//收回爪子
-						withdrawClaw();
-						// 当收到自己位置时,复位
-						if (clawX >= clawX0 - 20 && clawX <= clawX0 + 20 && clawY <= clawY0 + 20) {
-							restoration();
-						}
-					}
-					// 如果抓到金子，则收回爪子，及抓到的金子
-					if (grabSucceed) {
-						// 获得抓到的那个金子
-						GoldData gold = goldSets.get(beGrab);
-						// 如果物品太大，收线速度变慢
-						if (gold.goldSize >= 70) {
-							stretchSpeed = 2;
-						}
-						if (gold.goldSize >= 120) {
-							stretchSpeed = 1;
-						}
-						// 收回爪子
-						withdrawClaw();
-						// 收回碰到的物品
-						gold.goldX = (int) clawX - 50;
-						gold.goldY = (int) clawY;
-						// 当收到自己位置时，消除此金子
-						if (isWithdrawSucceed()) {
-							goldSets.remove(beGrab);
-							// 重置爪子
-							restoration();
-							// 增加得分
-							updateGrade(gold);
-						}
-					}
-				}
-			}
-			
-			//刷新间隔为20ms刷新一次
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// 刷新时间
-			setting.setTime(setting.getTime() + 20);
-			//刷新（重新绘图）
-			repaint();
+		}).start();
+	}
+
+	public void mining(){
+		// 如果过关了，就下一关
+		if(pass()) {
+			nextClass();
 		}
+		if (gameOver()) {
+			int result = JOptionPane.showConfirmDialog(null, "游戏失败，再来一局？", "游戏结果", JOptionPane.YES_NO_OPTION);
+			if (result == 0) {// 再来一句，刷新数据
+				restoration();
+				initData();
+				setting.initSetting();
+				repaint();
+			} else {// 退出
+				System.exit(0);
+			}
+		}
+
+
+		//准备阶段，爪子及线在半圆弧上移动
+		if (clawSpin) {
+			// 圆的方程
+			clawY = (int) (Math
+					.sqrt(10000 - ((clawX - (SoloMode.getWeight() / 2 - 20)) * (clawX - (SoloMode.getWeight() / 2 - 20)))))
+					+ 150 - 20;
+			//随着x坐标变化
+			clawX -= clawSpeed;
+			//当到达极限时,变向走，也就是只走半圆
+			if (clawX == 480) {
+				clawSpeed *= -1;
+			}
+			if (clawX == 680) {
+				clawSpeed *= -1;
+			}
+		} else { //爪子伸缩阶段
+			// 如果越界，则收回爪子
+			if (clawY >= 800 || clawX <= 0 || clawX >= SoloMode.getWeight() + 100) {
+				clawStretch = false;
+				backclaw = true;
+			}
+			//当可以向下伸长时
+			if (clawStretch) {
+				// 释放爪子
+				releaseClaw();
+				// 判断有没有抓到金子
+				for (int i = 0; i < goldSets.size(); i++) {
+					GoldData gold = goldSets.get(i);
+					// 如果爪子碰到金子
+					if (clawX >= gold.goldX && clawX <= gold.goldX + gold.goldSize && clawY >= gold.goldY
+							&& clawY <= gold.goldY + gold.goldSize) {
+						// 则伸缩标志=收回
+						clawStretch = false;
+						// 记录被抓金子的索引
+						beGrab = i;
+						// 抓到标志置true
+						grabSucceed = true;
+						break;
+					}
+				}
+			} else { //当可以收回爪子时
+				// 如果没有抓到东西，空收回
+				if (backclaw) {
+					//收回爪子
+					withdrawClaw();
+					// 当收到自己位置时,复位
+					if (clawX >= clawX0 - 20 && clawX <= clawX0 + 20 && clawY <= clawY0 + 20) {
+						restoration();
+					}
+				}
+				// 如果抓到金子，则收回爪子，及抓到的金子
+				if (grabSucceed) {
+					// 获得抓到的那个金子
+					GoldData gold = goldSets.get(beGrab);
+					// 如果物品太大，收线速度变慢
+					if (gold.goldSize >= 70) {
+						stretchSpeed = 2;
+					}
+					if (gold.goldSize >= 120) {
+						stretchSpeed = 1;
+					}
+					// 收回爪子
+					withdrawClaw();
+					// 收回碰到的物品
+					gold.goldX = (int) clawX - 50;
+					gold.goldY = (int) clawY;
+					// 当收到自己位置时，消除此金子
+					if (isWithdrawSucceed()) {
+						goldSets.remove(beGrab);
+						// 重置爪子
+						restoration();
+						// 增加得分
+						updateGrade(gold);
+					}
+				}
+			}
+		}
+		//刷新（重新绘图）
+		repaint();
 	}
 	// 下一关
 	public void nextClass() {

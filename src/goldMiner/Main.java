@@ -8,8 +8,6 @@ public class Main {
     private static int weight = 1200;
     private static int height = 800;
 
-    private static JFrame jf = new JFrame();
-
     public static void setHeight(int height) {
         Main.height = height;
     }
@@ -28,6 +26,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        JFrame jf = new JFrame();
         jf.setBounds(300, 100, Main.weight, Main.height);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -60,3 +59,4 @@ public class Main {
 
     }
 }
+

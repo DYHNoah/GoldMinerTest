@@ -3,6 +3,8 @@ package goldMiner;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -246,11 +248,16 @@ public class DoublePanel extends JPanel{
             }
 
         });
-        //程序主循环
-        while (true) {
-            mining(1);
-            new MyThread(2).run();
-        }
+
+        new Timer(20, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mining(1);
+                new MyThread(2).run();
+                // 刷新时间
+                setting.setTime(setting.getTime() + 20);
+            }
+        }).start();
     }
 
     public void mining(int myself){
@@ -443,21 +450,6 @@ public class DoublePanel extends JPanel{
                 }
             }
         }
-
-
-
-
-
-
-        //刷新间隔为20ms刷新一次
-        try {
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // 刷新时间
-        setting.setTime(setting.getTime() + 20);
         //刷新（重新绘图）
         repaint();
     }
