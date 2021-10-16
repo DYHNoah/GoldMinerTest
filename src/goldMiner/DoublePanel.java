@@ -235,6 +235,18 @@ public class DoublePanel extends JPanel{
         g.drawString("第" + setting.getMyClass() + "关", 20, 50);
     }
 
+    public void calculate_k1_b1(){
+        clawSpin_1 = false;
+        // 求出斜率k
+        k_1 = (clawY_1 - clawY0_1) / (clawX_1 - clawX0_1);
+    }
+
+    public void calculate_k2_b2(){
+        clawSpin_2 = false;
+        // 求出斜率k
+        k_2 = (clawY_2 - clawY0_2) / (clawX_2 - clawX0_2);
+    }
+
     public void action() {
         //获取焦点
         requestFocus();
@@ -247,15 +259,9 @@ public class DoublePanel extends JPanel{
                 int keyCode = e.getKeyCode();
                 // 点击空格
                 if (keyCode == KeyEvent.VK_S){
-                    clawSpin_1 = false;
-                    // 求出斜率k
-                    k_1 = (clawY_1 - clawY0_1) / (clawX_1 - clawX0_1);
-                    System.out.println("k_1:" + k_1);
+                    calculate_k1_b1();
                 }else if (keyCode == KeyEvent.VK_DOWN) {
-                    clawSpin_2 = false;
-                    // 求出斜率k
-                    k_2 = (clawY_2 - clawY0_2) / (clawX_2 - clawX0_2);
-                    System.out.println("k_2:" + k_2);
+                    calculate_k2_b2();
                 }
             }
 
@@ -273,7 +279,6 @@ public class DoublePanel extends JPanel{
     }
 
     public void mining(int myself){
-        System.out.println("------------------------------------------------------------------------");
         // 如果过关了，就下一关
         if(pass()) {
             nextClass();
@@ -294,7 +299,6 @@ public class DoublePanel extends JPanel{
         if (myself == 1){
             //准备阶段，爪子及线在半圆弧上移动
             if (clawSpin_1) {
-                System.out.println("准备阶段，爪子及线在半圆弧上移动");
                 // 圆的方程
                 clawY_1 = (int) (Math
                         .sqrt(10000 - ((clawX_1 - (xPosition_1 - 20)) * (clawX_1 - (xPosition_1 - 20)))))
@@ -309,16 +313,13 @@ public class DoublePanel extends JPanel{
                     clawSpeed_1 *= -1;
                 }
             } else { //爪子伸缩阶段
-                System.out.println("爪子伸缩阶段");
                 // 如果越界，则收回爪子
                 if (clawY_1 >= SoloMode.getHeight() || clawX_1 <= 0 || clawX_1 >= SoloMode.getWeight() + 100) {
-                    System.out.println("越界");
                     clawStretch_1 = false;
                     backclaw_1 = true;
                 }
                 //当可以向下伸长时
                 if (clawStretch_1) {
-                    System.out.println("爪子向下伸长");
                     // 释放爪子
                     releaseClaw(1);
                     // 判断有没有抓到金子
@@ -337,10 +338,8 @@ public class DoublePanel extends JPanel{
                         }
                     }
                 } else { //当可以收回爪子时
-                    System.out.println("爪子收回");
                     // 如果没有抓到东西，空收回
                     if (backclaw_1) {
-                        System.out.println("没有抓到东西，空收回");
                         //收回爪子
                         withdrawClaw(1);
                         // 当收到自己位置时,复位
@@ -350,7 +349,6 @@ public class DoublePanel extends JPanel{
                     }
                     // 如果抓到金子，则收回爪子，及抓到的金子
                     if (grabSucceed_1) {
-                        System.out.println("抓到金子，收回爪子，及抓到的金子");
                         // 获得抓到的那个金子
                         GoldData gold = goldSets.get(beGrab_1);
                         // 如果物品太大，收线速度变慢
@@ -382,7 +380,6 @@ public class DoublePanel extends JPanel{
         }else if(myself == 2){
             //准备阶段，爪子及线在半圆弧上移动
             if (clawSpin_2) {
-                System.out.println("准备阶段，爪子及线在半圆弧上移动");
                 // 圆的方程
                 clawY_2 = (int) (Math
                         .sqrt(10000 - ((clawX_2 - (xPosition_2 - 20)) * (clawX_2 - (xPosition_2 - 20)))))
@@ -397,16 +394,13 @@ public class DoublePanel extends JPanel{
                     clawSpeed_2 *= -1;
                 }
             } else { //爪子伸缩阶段
-                System.out.println("爪子伸缩阶段");
                 // 如果越界，则收回爪子
                 if (clawY_2 >= SoloMode.getHeight() || clawX_2 <= 0 || clawX_2 >= SoloMode.getWeight() + 100) {
-                    System.out.println("越界");
                     clawStretch_2 = false;
                     backclaw_2 = true;
                 }
                 //当可以向下伸长时
                 if (clawStretch_2) {
-                    System.out.println("爪子向下伸长");
                     // 释放爪子
                     releaseClaw(2);
                     // 判断有没有抓到金子
@@ -425,10 +419,8 @@ public class DoublePanel extends JPanel{
                         }
                     }
                 } else { //当可以收回爪子时
-                    System.out.println("爪子收回");
                     // 如果没有抓到东西，空收回
                     if (backclaw_2) {
-                        System.out.println("没有抓到东西，空收回");
                         //收回爪子
                         withdrawClaw(2);
                         // 当收到自己位置时,复位
@@ -438,7 +430,6 @@ public class DoublePanel extends JPanel{
                     }
                     // 如果抓到金子，则收回爪子，及抓到的金子
                     if (grabSucceed_2) {
-                        System.out.println("抓到金子，收回爪子，及抓到的金子");
                         // 获得抓到的那个金子
                         GoldData gold = goldSets.get(beGrab_2);
                         // 如果物品太大，收线速度变慢
@@ -583,7 +574,6 @@ public class DoublePanel extends JPanel{
         // 如果游戏超时了，再判断有没有到达指定分数
         if (overtime(setting.getTime())) {
             if (setting.getGrade() >= setting.getTargetScore()) {
-                System.out.println("通关");
                 return true;
             }
         }
@@ -597,7 +587,6 @@ public class DoublePanel extends JPanel{
         }
         // 当没有金子的时候，游戏结束
         if (count == 0) {
-            System.out.println("没有金子了");
             return true;
         }
         return false;
@@ -606,7 +595,6 @@ public class DoublePanel extends JPanel{
 
         if (overtime(setting.getTime())) {
             if (setting.getGrade() < setting.getTargetScore()) {
-                System.out.println("失败");
                 return true;
             }
         }

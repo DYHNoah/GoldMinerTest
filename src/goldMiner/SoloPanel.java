@@ -255,16 +255,20 @@ public class SoloPanel extends JPanel {
 		grabSucceed = false;
 	}
 
+	public void calculate_k_b(){
+		clawSpin = false;
+		// 求出斜率k
+		k = (clawY - clawY0) / (clawX - clawX0);
+		b = clawY - (k * clawX);
+	}
+
 	public void action() {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				super.mouseClicked(e);
-				clawSpin = false;
-				// 求出斜率k
-				k = (clawY - clawY0) / (clawX - clawX0);
-				b = clawY - (k * clawX);
+				calculate_k_b();
 			}
 
 		});
@@ -279,9 +283,7 @@ public class SoloPanel extends JPanel {
 				int keyCode = e.getKeyCode();
 				// 点击空格
 				if (keyCode == KeyEvent.VK_SPACE) {
-					clawSpin = false;
-					// 求出斜率k
-					k = (clawY - clawY0) / (clawX - clawX0);
+					calculate_k_b();
 				}
 			}
 
