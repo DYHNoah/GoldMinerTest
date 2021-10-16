@@ -16,7 +16,7 @@ public class MainPanel extends JPanel {
 
         //缓冲图片
         try {
-            background = ImageIO.read(getClass().getResource("splash.jpg"));
+            background = ImageIO.read(getClass().getResource("static/splash.jpg"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -27,9 +27,9 @@ public class MainPanel extends JPanel {
     public void initButton(JButton soloButton, JButton doubleButton){
         soloButton.setBounds(150, 150, 250, 85);
         doubleButton.setBounds(150, 300, 250, 85);
-        ImageIcon soloImage = new ImageIcon(getClass().getResource("solo.png"));
+        ImageIcon soloImage = new ImageIcon(getClass().getResource("static/solo.png"));
         soloButton.setIcon(soloImage);
-        ImageIcon doubleImage = new ImageIcon(getClass().getResource("double.png"));
+        ImageIcon doubleImage = new ImageIcon(getClass().getResource("static/double.png"));
         doubleButton.setIcon(doubleImage);
         this.add(soloButton);
         this.add(doubleButton);

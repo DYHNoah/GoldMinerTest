@@ -100,12 +100,12 @@ public class SoloPanel extends JPanel {
 		
 		//缓冲图片
 		try {
-			goldImg = ImageIO.read(getClass().getResource("gold.png"));
-			background = ImageIO.read(getClass().getResource("background.jpg"));
-			mySelfImg = ImageIO.read(getClass().getResource("mySelf.png"));
-			clawImg = ImageIO.read(getClass().getResource("claw1.png"));
-			diamondImg = ImageIO.read(getClass().getResource("diamond1.png"));
-			rockImg = ImageIO.read(getClass().getResource("rock.png"));
+			goldImg = ImageIO.read(getClass().getResource("static/gold.png"));
+			background = ImageIO.read(getClass().getResource("static/background.jpg"));
+			mySelfImg = ImageIO.read(getClass().getResource("static/mySelf.png"));
+			clawImg = ImageIO.read(getClass().getResource("static/claw1.png"));
+			diamondImg = ImageIO.read(getClass().getResource("static/diamond1.png"));
+			rockImg = ImageIO.read(getClass().getResource("static/rock.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -255,6 +255,9 @@ public class SoloPanel extends JPanel {
 		grabSucceed = false;
 	}
 
+	/*
+	用于模拟案件和点击的方法，测试时调用这个
+	 */
 	public void calculate_k_b(){
 		clawSpin = false;
 		// 求出斜率k

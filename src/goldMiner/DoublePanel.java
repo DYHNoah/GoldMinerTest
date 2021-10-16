@@ -116,12 +116,12 @@ public class DoublePanel extends JPanel{
 
         //»º³åÍ¼Æ¬
         try {
-            goldImg = ImageIO.read(getClass().getResource("gold.png"));
-            background = ImageIO.read(getClass().getResource("background.jpg"));
-            mySelfImg = ImageIO.read(getClass().getResource("mySelf.png"));
-            clawImg = ImageIO.read(getClass().getResource("claw1.png"));
-            diamondImg = ImageIO.read(getClass().getResource("diamond1.png"));
-            rockImg = ImageIO.read(getClass().getResource("rock.png"));
+            goldImg = ImageIO.read(getClass().getResource("static/gold.png"));
+            background = ImageIO.read(getClass().getResource("static/background.jpg"));
+            mySelfImg = ImageIO.read(getClass().getResource("static/mySelf.png"));
+            clawImg = ImageIO.read(getClass().getResource("static/claw1.png"));
+            diamondImg = ImageIO.read(getClass().getResource("static/diamond1.png"));
+            rockImg = ImageIO.read(getClass().getResource("static/rock.png"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
