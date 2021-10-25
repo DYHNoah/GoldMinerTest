@@ -68,6 +68,9 @@ public class Setting {
 		Setting.grade = grade;
 	}
 
+	public static int getDeadline() {
+		return deadline;
+	}
 	
 
 	

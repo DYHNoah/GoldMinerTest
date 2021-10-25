@@ -629,6 +629,134 @@ public class DoublePanel extends JPanel{
             mining(player);
         }
     }
+    
+    public int getClawX0_1() {
+		return clawX0_1;
+	}
+
+
+
+	public int getClawY0_1() {
+		return clawY0_1;
+	}
+
+
+
+	public double getClawX_1() {
+		return clawX_1;
+	}
+
+
+
+	public double getClawY_1() {
+		return clawY_1;
+	}
+
+	public int getClawX0_2() {
+		return clawX0_2;
+	}
+
+
+
+	public int getClawY0_2() {
+		return clawY0_2;
+	}
+
+
+
+	public double getClawX_2() {
+		return clawX_2;
+	}
+
+
+
+	public double getClawY_2() {
+		return clawY_2;
+	}
+
+
+	public int getClawSpeed_1() {
+		return clawSpeed_1;
+	}
+	
+	public int getClawSpeed_2() {
+		return clawSpeed_2;
+	}
+
+
+	public int getStretchSpeed_1() {
+		return stretchSpeed_1;
+	}
+	
+	public int getStretchSpeed_2() {
+		return stretchSpeed_2;
+	}
+
+
+	public boolean isClawSpin_1() {
+		return clawSpin_1;
+	}
+
+	public boolean isClawSpin_2() {
+		return clawSpin_2;
+	}
+
+
+	public boolean isClawStretch_1() {
+		return clawStretch_1;
+	}
+
+	public boolean isClawStretch_2() {
+		return clawStretch_2;
+	}
+	
+	public void setClawStretch_1(boolean clawStretch) {
+		this.clawStretch_1 = clawStretch;
+	}
+	
+	public void setClawStretch_2(boolean clawStretch) {
+		this.clawStretch_2 = clawStretch;
+	}
+
+	public double getK_1() {
+		return k_1;
+	}
+	
+	public double getK_2() {
+		return k_2;
+	}
+
+	public boolean isBackclaw_1() {
+		return backclaw_1;
+	}
+	
+	public boolean isBackclaw_2() {
+		return backclaw_2;
+	}
+
+	public void setBackclaw_1(boolean backclaw) {
+		this.backclaw_1 = backclaw;
+	}
+	
+	public void setBackclaw_2(boolean backclaw) {
+		this.backclaw_2 = backclaw;
+	}
+
+	public int getBeGrab_1() {
+		return beGrab_1;
+	}
+
+	public int getBeGrab_2() {
+		return beGrab_2;
+	}
+
+	public boolean isGrabSucceed_1() {
+		return grabSucceed_1;
+	}
+	
+	public boolean isGrabSucceed_2() {
+		return grabSucceed_2;
+	}
 
 }
 

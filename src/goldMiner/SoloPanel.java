@@ -487,4 +487,75 @@ public class SoloPanel extends JPanel {
 		return goldSets;
 	}
 
+	
+	
+	public int getClawX0() {
+		return clawX0;
+	}
+
+
+
+	public int getClawY0() {
+		return clawY0;
+	}
+
+
+
+	public double getClawX() {
+		return clawX;
+	}
+
+
+
+	public double getClawY() {
+		return clawY;
+	}
+
+
+
+	public int getClawSpeed() {
+		return clawSpeed;
+	}
+
+
+	public int getStretchSpeed() {
+		return stretchSpeed;
+	}
+
+
+
+	public boolean isClawSpin() {
+		return clawSpin;
+	}
+
+
+
+	public boolean isClawStretch() {
+		return clawStretch;
+	}
+
+	public void setClawStretch(boolean clawStretch) {
+		this.clawStretch = clawStretch;
+	}
+
+	public double getK() {
+		return k;
+	}
+
+
+	public boolean isBackclaw() {
+		return backclaw;
+	}
+
+	public void setBackclaw(boolean backclaw) {
+		this.backclaw = backclaw;
+	}
+
+	public int getBeGrab() {
+		return beGrab;
+	}
+
+	public boolean isGrabSucceed() {
+		return grabSucceed;
+	}
 }

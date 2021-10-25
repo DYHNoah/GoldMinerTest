@@ -49,4 +49,26 @@ public class GoldData {
 			this.goldSize = (int)(Math.random() * 30 + 30);
 		}
 	}
+	
+	public int getGoldX() {
+		return goldX;
+	}
+
+
+	public int getGoldY() {
+		return goldY;
+	}
+
+
+	public int getGoldSize() {
+		return goldSize;
+	}
+
+	public int getKind() {
+		return kind;
+	}
+
+	public void setKind(int kind) {
+		this.kind = kind;
+	}
 }
