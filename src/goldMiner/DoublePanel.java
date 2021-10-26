@@ -100,7 +100,7 @@ public class DoublePanel extends JPanel{
     /**
      * 是否抓到金子
      * true: 抓到金子了
-     * flase: 没抓到金子
+     * false: 没抓到金子
      */
     boolean grabSucceed_1;
     boolean grabSucceed_2;

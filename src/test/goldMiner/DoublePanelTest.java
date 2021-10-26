@@ -11,6 +11,7 @@ import goldMiner.SoloPanel;
 import goldMiner.DoublePanel;
 import goldMiner.Setting;
 import goldMiner.SoloMode;
+import goldMiner.DoubleMode;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ import org.junit.rules.ErrorCollector;
 public class DoublePanelTest {
     DoublePanel doublePanel;
     Setting setting;
-    SoloMode soloMode;
+    DoubleMode doubleMode;
     ArrayList<GoldData> goldSets;
     int number,weight;
 
@@ -40,16 +41,16 @@ public class DoublePanelTest {
 public void before() throws Exception {
     doublePanel = new DoublePanel();
     setting = new Setting();
-    soloMode = new SoloMode();
+    doubleMode = new DoubleMode();
     number=setting.getMyClass();
-    weight=SoloMode.getWeight();
+    weight=DoubleMode.getWeight();
 }
 
 @After
 public void after() throws Exception {
 	doublePanel = null;
     setting = null;
-    soloMode = null;
+    doubleMode = null;
 }
 
 /**
@@ -86,33 +87,33 @@ public void testInitData() throws Exception {
 public void testReleaseClaw() throws Exception {
 //TODO: Test goes here...
         int angle = 0;//angle表示旋转的角度
-        SoloPanel.getGoldSets().clear();//清除金子
+        DoublePanel.getGoldSets().clear();//清除金子
         while (angle <= 401) {//最大角度为401,保证可以遍历全部用例
             int rotate = angle;//当前循环的旋转角度次数
-            while (rotate >0) {//若rotate为0，则会出bug
-                assertTrue(doublePanel.isClawSpin());//确保进入爪子旋转分支。
-                doublePanel.mining();
+            while (rotate > 0) {//若rotate为0，则会出bug
+                assertTrue(doublePanel.isClawSpin_1());//确保进入爪子旋转分支。
+                doublePanel.mining(1);
                 rotate = rotate - 1;
             }
-            doublePanel.calculate_k_b();//当旋转到角度为angle的时候，出钩子
-            if (Double.isInfinite(doublePanel.getK()) || Double.isNaN(soloPanel.getK())) {
-                System.out.println("K:"+doublePanel.getK());
+            doublePanel.calculate_k1_b1();//当旋转到角度为angle的时候，出钩子
+            if (Double.isInfinite(doublePanel.getK_1()) || Double.isNaN(doublePanel.getK_1())) {
+                System.out.println("K:"+doublePanel.getK_1());
                 fail();
             }
-            while (!soloPanel.isBackclaw()) {//不停调用向下移动方法，直到到达下降边界后跳出;
-                double beforeClawX = soloPanel.getClawX();//记录下降之前的X坐标。
-                soloPanel.releaseClaw();//调用一次向下移动的方法。
-                if (beforeClawX <= soloPanel.getClawX0())
-                    assertEquals(beforeClawX - 2, soloPanel.getClawX(), 0.1);
+            while (!doublePanel.isBackclaw_1()) {//不停调用向下移动方法，直到到达下降边界后跳出;
+                double beforeClawX = doublePanel.getClawX_1();//记录下降之前的X坐标。
+                doublePanel.releaseClaw(1);//调用一次向下移动的方法。
+                if (beforeClawX <= doublePanel.getClawX0_1())
+                    assertEquals(beforeClawX - 2, doublePanel.getClawX_1(), 0.1);
                 else
-                    assertEquals(beforeClawX + 2, soloPanel.getClawX(), 0.1);
-                assertEquals(soloPanel.getClawY0() + soloPanel.getK() * (soloPanel.getClawX() - soloPanel.getClawX0()), soloPanel.getClawY(), 1);
-                if (soloPanel.getClawY() >= 800 || soloPanel.getClawX() <= 0 || soloPanel.getClawX() >= soloMode.getWeight()) {
-                    soloPanel.setClawStretch(false);
-                    soloPanel.setBackclaw(true);
+                    assertEquals(beforeClawX + 2, doublePanel.getClawX_1(), 0.1);
+                assertEquals(doublePanel.getClawY0_1() + doublePanel.getK_1() * (doublePanel.getClawX_1() - doublePanel.getClawX0_1()), doublePanel.getClawY_1(), 1);
+                if (doublePanel.getClawY_1() >= 800 || doublePanel.getClawX_1() <= 0 || doublePanel.getClawX_1() >= doubleMode.getWeight()) {
+                	doublePanel.setClawStretch_1(false);
+                	doublePanel.setBackclaw_1(true);
                 }
             }
-            soloPanel.restoration();//复位
+            doublePanel.restoration(1);//复位
             angle = angle + 1;//下一次角度加一。
         }
 
@@ -127,36 +128,36 @@ public void testReleaseClaw() throws Exception {
 public void testWithdrawClaw() throws Exception {
 //TODO: Test goes here...
     int angle = 0;//angle表示旋转的角度
-    SoloPanel.getGoldSets().clear();//清除金子
+    DoublePanel.getGoldSets().clear();//清除金子
     while (angle <= 401) {//最大角度为401，遍历所有用例
         int rotate = angle;//当前循环的旋转角度次数
         while (rotate >= 0) {
-            assertTrue(soloPanel.isClawSpin());//确保进入爪子旋转分支。
-            soloPanel.mining();
+            assertTrue(doublePanel.isClawSpin_1());//确保进入爪子旋转分支。
+            doublePanel.mining(1);
             rotate = rotate - 1;
         }
-        soloPanel.calculate_k_b();//当旋转到角度为angle的时候，出钩子
-        while (!soloPanel.isBackclaw()) {//不停调用向下移动方法，直到到达下降边界后跳出;
-            soloPanel.mining();//调用一次向下移动的方法。
+        doublePanel.calculate_k1_b1();//当旋转到角度为angle的时候，出钩子
+        while (!doublePanel.isBackclaw_1()) {//不停调用向下移动方法，直到到达下降边界后跳出;
+        	doublePanel.mining(1);//调用一次向下移动的方法。
         }
-        System.out.println("clawX0:" + soloPanel.getClawX0());
-        System.out.println("clawY0:" + soloPanel.getClawY0());
-        while (!soloPanel.isWithdrawSucceed()) {//测试钩子是否能回到初始位置，跳出。
-            double beforeClawX = soloPanel.getClawX();//记录上升之前的X坐标。
-            System.out.println("beforeclawX:" + soloPanel.getClawX());
-            System.out.println("beforeclawY:" + soloPanel.getClawY());//打印向上移动之前的坐标
-            soloPanel.withdrawClaw();//调用一次向上移动的方法。
-            System.out.println("afterclawX:" + soloPanel.getClawX());
-            System.out.println("afterclawY:" + soloPanel.getClawY());//打印向上移动之后的坐标
-            if (beforeClawX <= soloPanel.getClawX0())
-                assertEquals(beforeClawX + soloPanel.getStretchSpeed(), soloPanel.getClawX(), 0.1);
+        System.out.println("clawX0:" + doublePanel.getClawX0_1());
+        System.out.println("clawY0:" + doublePanel.getClawY0_1());
+        while (!doublePanel.isWithdrawSucceed(1)) {//测试钩子是否能回到初始位置，跳出。
+            double beforeClawX = doublePanel.getClawX_1();//记录上升之前的X坐标。
+            System.out.println("beforeclawX:" + doublePanel.getClawX_1());
+            System.out.println("beforeclawY:" + doublePanel.getClawY_1());//打印向上移动之前的坐标
+            doublePanel.withdrawClaw(1);//调用一次向上移动的方法。
+            System.out.println("afterclawX:" + doublePanel.getClawX_1());
+            System.out.println("afterclawY:" + doublePanel.getClawY_1());//打印向上移动之后的坐标
+            if (beforeClawX <= doublePanel.getClawX0_1())
+                assertEquals(beforeClawX + doublePanel.getStretchSpeed_1(), doublePanel.getClawX_1(), 0.1);
             else
-                assertEquals(beforeClawX - soloPanel.getStretchSpeed(), soloPanel.getClawX(), 0.1);
-            assertEquals(soloPanel.getClawY0() + soloPanel.getK() * (soloPanel.getClawX() - soloPanel.getClawX0()), soloPanel.getClawY(), 1);
-            System.out.println(soloPanel.isClawStretch());
+                assertEquals(beforeClawX - doublePanel.getStretchSpeed_1(), doublePanel.getClawX_1(), 0.1);
+            assertEquals(doublePanel.getClawY0_1() + doublePanel.getK_1() * (doublePanel.getClawX_1() - doublePanel.getClawX0_1()), doublePanel.getClawY_1(), 1);
+            System.out.println(doublePanel.isClawStretch_1());
             System.out.println("--------------------------------");
         }
-        soloPanel.restoration();
+        doublePanel.restoration(1);
         angle = angle + 1;
     }
 
@@ -170,17 +171,17 @@ public void testWithdrawClaw() throws Exception {
 @Test
 public void testRestoration() throws Exception {
 //TODO: Test goes here...
-    soloPanel.restoration();
-    assertEquals(580,soloPanel.getClawX(),0);
-    assertEquals(230,soloPanel.getClawY(),0);
-    assertEquals(weight/2-20,soloPanel.getClawX0(),0);
-    assertEquals(130, soloPanel.getClawY0(),0);
-    assertEquals(1, soloPanel.getClawSpeed());
-    assertEquals(3, soloPanel.getStretchSpeed());
-    assertEquals(true, soloPanel.isClawSpin());
-    assertEquals(true, soloPanel.isClawStretch());
-    assertEquals(false, soloPanel.isBackclaw());
-    assertEquals(false, soloPanel.isGrabSucceed());
+	doublePanel.restoration(1);
+    assertEquals(580,doublePanel.getClawX_1(),0);
+    assertEquals(230,doublePanel.getClawY_1(),0);
+    assertEquals(weight/2-20,doublePanel.getClawX0_1(),0);
+    assertEquals(130, doublePanel.getClawY0_1(),0);
+    assertEquals(1, doublePanel.getClawSpeed_1());
+    assertEquals(3, doublePanel.getStretchSpeed_1());
+    assertEquals(true, doublePanel.isClawSpin_1());
+    assertEquals(true, doublePanel.isClawStretch_1());
+    assertEquals(false, doublePanel.isBackclaw_1());
+    assertEquals(false, doublePanel.isGrabSucceed_1());
 }
 
 /**
@@ -192,26 +193,26 @@ public void testRestoration() throws Exception {
 public void testSpeed(){
     int time = 0;
     while(time <= 100) {
-        int expectStrechSpeed = soloPanel.getStretchSpeed();
+        int expectStrechSpeed = doublePanel.getStretchSpeed_1();
         //模拟爪子处于准备状态
         for(int number = time; number >= 0; --number) {
-            soloPanel.mining();
+        	doublePanel.mining(1);
         }
         //获取出出爪时爪子的位置
-        double x1 = soloPanel.getClawX();
-        double y1 = soloPanel.getClawY();
+        double x1 = doublePanel.getClawX_1();
+        double y1 = doublePanel.getClawY_1();
         //模拟出爪子20ms
-        soloPanel.calculate_k_b();
-        soloPanel.mining();
+        doublePanel.calculate_k1_b1();
+        doublePanel.mining(1);
         //获取20ms后爪子的位置
-        double x2 = soloPanel.getClawX();
-        double y2 = soloPanel.getClawY();
+        double x2 = doublePanel.getClawX_1();
+        double y2 = doublePanel.getClawY_1();
         //计算爪子的速度
         double speed = Math.sqrt((x2-x1)*(x2-x1) + (y1-y2)*(y1-y2));
         //判断是否与预期的速度相同，允许误差0
         try{ assertEquals(expectStrechSpeed, speed, 0.1); }catch (Throwable t){
             collector.addError(t); }
-        soloPanel.restoration();
+        doublePanel.restoration(1);
         ++time;
     }
 }
@@ -240,7 +241,7 @@ public void testUpdateGrade() throws Exception {
 public int updateGradeFunction(GoldData goldData,int kind,int initGrade) throws Exception{
     setting.setGrade(initGrade);
     goldData.setKind(kind);
-    soloPanel.updateGrade(goldData);
+    doublePanel.updateGrade(goldData);
     return setting.getGrade();
 }
 /**
@@ -255,7 +256,7 @@ public void testPass() throws Exception {
     for(int grade=setting.getTargetScore()-200;grade<setting.getTargetScore()+200;grade++){
         setting.setGrade(grade);
         if(setting.getGrade()>=setting.getTargetScore()){
-            assertTrue(soloPanel.pass());
+            assertTrue(doublePanel.pass());
         }
     }
 //    超时分数大于通过，分数小于不通过
@@ -263,9 +264,9 @@ public void testPass() throws Exception {
     for(int grade=setting.getTargetScore()-200;grade<setting.getTargetScore()+200;grade++){
         setting.setGrade(grade);
         if(setting.getGrade()>=setting.getTargetScore()){
-            assertTrue(soloPanel.pass());
+            assertTrue(doublePanel.pass());
         }else{
-            assertFalse(soloPanel.pass());
+            assertFalse(doublePanel.pass());
         }
     }
 //    判断没有金子也通过
@@ -294,7 +295,7 @@ public void testGameOver() throws Exception {
 //TODO: Test goes here...
     int currentTime = 0;
 //    前面60s都在模拟时间增长
-    while(!soloPanel.overtime(currentTime)){
+    while(!doublePanel.overtime(currentTime)){
         setting.setTime(setting.getTime() + 20);
         currentTime=setting.getTime();
     }
@@ -304,9 +305,9 @@ public void testGameOver() throws Exception {
        for(int grade=setting.getTargetScore()-200;grade<setting.getTargetScore()+200;grade++){
            setting.setGrade(grade);
            if(setting.getGrade()<setting.getTargetScore()){
-               assertTrue(soloPanel.gameOver());
+               assertTrue(doublePanel.gameOver());
            }else{
-               assertFalse(soloPanel.gameOver());
+               assertFalse(doublePanel.gameOver());
            }
        }
    }
@@ -323,9 +324,9 @@ public void testOvertime() throws Exception {
 //    边界测试
     for(int i = 50000;i<70000;i+=1000){
         if(i<=60000){
-            assertFalse(soloPanel.overtime(i));
+            assertFalse(doublePanel.overtime(i));
         }else{
-            assertTrue(soloPanel.overtime(i));
+            assertTrue(doublePanel.overtime(i));
         }
     }
 }
@@ -334,9 +335,9 @@ public void testOvertime() throws Exception {
 public void testGrabSucceed() {
     int angle = 0;//angle表示旋转的角度
     int oralSum = 0;//初始化金子记录为0
-    for(int i=0;i<soloPanel.getGoldSets().size();i++){
-        GoldData gold = SoloPanel.getGoldSets().get(i);
-        soloPanel.updateGrade(gold);
+    for(int i=0;i<doublePanel.getGoldSets().size();i++){
+        GoldData gold = DoublePanel.getGoldSets().get(i);
+        doublePanel.updateGrade(gold);
     }
     int targetSum  = setting.getGrade();//获取目标分数
     System.out.println("targetScore:"+targetSum);//目标分数打印
@@ -345,38 +346,38 @@ public void testGrabSucceed() {
     {
         int rotate = angle;
         while(rotate>=0){//当前旋转到rotate角度再跳出循环。
-            soloPanel.mining();//循环一次，偏转一个角度。
+        	doublePanel.mining(1);//循环一次，偏转一个角度。
             rotate = rotate - 1;
         }
-        soloPanel.calculate_k_b();//当旋转到当前角度为angle的时候，出钩子
-        while (soloPanel.isClawStretch()) {//clawStretch 初始为true向下伸 碰见边界或金子为false向上收回
+        doublePanel.calculate_k1_b1();//当旋转到当前角度为angle的时候，出钩子
+        while (doublePanel.isClawStretch_1()) {//clawStretch 初始为true向下伸 碰见边界或金子为false向上收回
             //不停调用向下移动方法，搜到金子或到达下降边界后跳出;
-            soloPanel.mining();//调用一次向下移动的方法。
+        	doublePanel.mining(1);//调用一次向下移动的方法。
         }
-        if(!soloPanel.isBackclaw()){
-            assertTrue(soloPanel.isGrabSucceed());//确保标志位改变
-            if(soloPanel.getBeGrab()>=soloPanel.getGoldSets().size()||soloPanel.getBeGrab()<0){
+        if(!doublePanel.isBackclaw_1()){
+            assertTrue(doublePanel.isGrabSucceed_1());//确保标志位改变
+            if(doublePanel.getBeGrab_1()>=doublePanel.getGoldSets().size()||doublePanel.getBeGrab_1()<0){
                 fail();
             }
-            GoldData curGold=SoloPanel.getGoldSets().get(soloPanel.getBeGrab());//获取当前抓到金子的对象
-            while(!soloPanel.isClawSpin()){//处于旋转状态再跳出。（先收回再处于旋转状态）
-                soloPanel.mining();//若前面测试案例通过，则必定进入改变收回绳子速度的循环。
-                if(soloPanel.isClawSpin()){
+            GoldData curGold=DoublePanel.getGoldSets().get(doublePanel.getBeGrab_1());//获取当前抓到金子的对象
+            while(!doublePanel.isClawSpin_1()){//处于旋转状态再跳出。（先收回再处于旋转状态）
+            	doublePanel.mining(1);//若前面测试案例通过，则必定进入改变收回绳子速度的循环。
+                if(doublePanel.isClawSpin_1()){
                     break;
                 }//如果某次拉着金子上升后到达边界收回，则不进行下列判断，因为收回后状态会产生突变。
-                assertEquals(SoloPanel.getGoldSets().get(soloPanel.getBeGrab()).getGoldX()+25,(int)soloPanel.getClawX());
-                assertEquals(SoloPanel.getGoldSets().get(soloPanel.getBeGrab()).getGoldY(),(int)soloPanel.getClawY());
+                assertEquals(DoublePanel.getGoldSets().get(doublePanel.getBeGrab_1()).getGoldX()+25,(int)doublePanel.getClawX_1());
+                assertEquals(DoublePanel.getGoldSets().get(doublePanel.getBeGrab_1()).getGoldY(),(int)doublePanel.getClawY_1());
                 //比较金子的移动是否是以钩子为参照系移动
-                if(curGold.getKind()==5) assertEquals(1,soloPanel.getStretchSpeed());
-                else if(curGold.getGoldSize()>=100) assertEquals(2,soloPanel.getStretchSpeed());
-                else if(curGold.getKind()==4) assertEquals(4,soloPanel.getStretchSpeed());
-                else assertEquals(3,soloPanel.getStretchSpeed());
+                if(curGold.getKind()==5) assertEquals(1,doublePanel.getStretchSpeed_1());
+                else if(curGold.getGoldSize()>=100) assertEquals(2,doublePanel.getStretchSpeed_1());
+                else if(curGold.getKind()==4) assertEquals(4,doublePanel.getStretchSpeed_1());
+                else assertEquals(3,doublePanel.getStretchSpeed_1());
                 //对速度改变进行判断
             }
             oralSum = oralSum + setting.getGrade();//累加金钱
             setting.setGrade(0);//避免通关，每次出钩子钱都初始设为0；
         }
-        soloPanel.restoration();//复位
+        doublePanel.restoration(1);//复位
         angle = angle + 1;
     }
     System.out.println("finallyScore:"+oralSum);
@@ -386,13 +387,13 @@ public void testGrabSucceed() {
 @Test
 public void testClawSpinChangeDirection() {
     for(int time = 20000; time >= 0; --time) {
-        int beforeClawSpeed = soloPanel.getClawSpeed();
-        assertTrue(soloPanel.isClawSpin());
-        soloPanel.mining();
-        if (soloPanel.getClawX() != 480.0D && soloPanel.getClawX()!= 680.0D) {
-            assertEquals((long)beforeClawSpeed, (long)soloPanel.getClawSpeed());
+        int beforeClawSpeed = doublePanel.getClawSpeed_1();
+        assertTrue(doublePanel.isClawSpin_1());
+        doublePanel.mining(1);
+        if (doublePanel.getClawX_1() != 480.0D && doublePanel.getClawX_1()!= 680.0D) {
+            assertEquals((long)beforeClawSpeed, (long)doublePanel.getClawSpeed_1());
         } else {
-            assertEquals((long)(beforeClawSpeed * -1), (long)soloPanel.getClawSpeed());
+            assertEquals((long)(beforeClawSpeed * -1), (long)doublePanel.getClawSpeed_1());
         }
     }
 }
